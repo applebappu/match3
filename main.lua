@@ -1,3 +1,5 @@
+love.window.setTitle('Match 3')
+
 -- GEMS --
 gems = {
 	[1] = {255,0,0},
@@ -17,6 +19,8 @@ for i = 1, board_size do
 		board[i][j] = {"o", gems[math.random(1,4)], false}
 	end
 end
+
+love.window.setMode((board_size + 2) * tile_size, (board_size + 2) * tile_size)
 
 -- FONT --
 font = love.graphics.newFont("courier.ttf", tile_size)
@@ -65,8 +69,12 @@ function love.update(dt)
 	for i = 1, #board do
 		for j = 1, #board[i] do
 			local tile1 = board[i][j]
-			local tile2 = board[i + 1][j]
-			local tile3 = board[i + 2][j]
+			if board[i + 1][j] ~= nil then
+				local tile2 = board[i + 1][j]
+			end
+			if board[i + 2][j] ~= nil then
+				local tile3 = board[i + 2][j]
+			end
 			local tile2v = board[i][j + 1]
 			local tile3v = board[i][j + 2]
 
