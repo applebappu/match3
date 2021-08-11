@@ -1,16 +1,12 @@
--- gonna make a match 3 game in lua/love2d.
--- gonna do it with ascii characters instead of graphics
--- it'll be good practice for (and relief from) a cursor-based menu system
--- for Wizard Tower later
-
 -- BOARD --
 tile_size = 20
 board_size = 10
 board = {}
 for i = 1, board_size do
 	board[i] = {}
+	local gem = {}
 	for j = 1, board_size do
-		board[i][j] = {}
+		board[i][j] = {"o", gem}
 	end
 end
 
@@ -29,10 +25,18 @@ cursor = {
 	}
 }
 
+-- GEMS --
+gems = {
+	red = {255,0,0},
+	green = {0,255,0},
+	blue = {0,0,255},
+	white = {255,255,255}
+}
+
 function love.draw()
 	for i = 1, #board do
 		for j = 1, #board[i] do
-			love.graphics.print("o", i * tile_size, j * tile_size)
+			love.graphics.print(board[i][j][1], i * tile_size, j * tile_size)
 		end
 	end
 
