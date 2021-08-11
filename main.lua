@@ -1,4 +1,5 @@
 love.window.setTitle('Match 3')
+love.math.setRandomSeed(os.time())
 
 -- GEMS --
 gems = {
@@ -37,8 +38,6 @@ cursor = {
 	}
 }
 
-print(board[1][1][2])
-
 function love.draw()
 	for i = 1, #board do
 		for j = 1, #board[i] do
@@ -69,14 +68,27 @@ function love.update(dt)
 	for i = 1, #board do
 		for j = 1, #board[i] do
 			local tile1 = board[i][j]
-			if board[i + 1][j] ~= nil then
-				local tile2 = board[i + 1][j]
+			local tile2 = nil
+			local tile3 = nil
+
+			local tile2v = nil
+			local tile3v = nil
+
+			if i + 1 <= board_size then
+				tile2 = board[i + 1][j]
 			end
-			if board[i + 2][j] ~= nil then
-				local tile3 = board[i + 2][j]
+
+			if i + 2 <= board_size then
+				tile3 = board[i + 2][j]
 			end
-			local tile2v = board[i][j + 1]
-			local tile3v = board[i][j + 2]
+
+			if j + 1 <= board_size then
+				tile2v = board[i][j + 1]
+			end
+	
+			if j + 2 <= board_size then
+				tile3v = board[i][j + 2]
+			end
 
 			if tile1 == tile2 then
 				if tile2 == tile3 then
@@ -84,7 +96,9 @@ function love.update(dt)
 					tile2[3] = true
 					tile3[3] = true
 				end
-			elseif tile1 == tile2v then
+			end
+
+			if tile1 == tile2v then
 				if tile2v == tile3v then
 					tile1[3] = true
 					tile2v[3] = true
