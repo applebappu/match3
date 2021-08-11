@@ -1,12 +1,20 @@
+-- GEMS --
+gems = {
+	[1] = {255,0,0},
+	[2] = {0,255,0},
+	[3] = {0,0,255},
+	[4] = {255,255,255}
+}
+
 -- BOARD --
 tile_size = 20
 board_size = 10
 board = {}
 for i = 1, board_size do
 	board[i] = {}
-	local gem = {}
+		
 	for j = 1, board_size do
-		board[i][j] = {"o", gem}
+		board[i][j] = {"o", gems[math.random(1,4)], false}
 	end
 end
 
@@ -25,18 +33,15 @@ cursor = {
 	}
 }
 
--- GEMS --
-gems = {
-	red = {255,0,0},
-	green = {0,255,0},
-	blue = {0,0,255},
-	white = {255,255,255}
-}
+print(board[1][1][2])
 
 function love.draw()
 	for i = 1, #board do
 		for j = 1, #board[i] do
-			love.graphics.print(board[i][j][1], i * tile_size, j * tile_size)
+			if board[i][j][3] == false then
+				love.graphics.setColor(board[i][j][2][1], board[i][j][2][2], board[i][j][2][3])
+				love.graphics.print(board[i][j][1], i * tile_size, j * tile_size)
+			end
 		end
 	end
 
@@ -54,6 +59,30 @@ function love.update(dt)
 			cursor.visible = false
 		else
 			cursor.visible = true
+		end
+	end
+	-- find matches, remove them
+	for i = 1, #board do
+		for j = 1, #board[i] do
+			local tile1 = board[i][j]
+			local tile2 = board[i + 1][j]
+			local tile3 = board[i + 2][j]
+			local tile2v = board[i][j + 1]
+			local tile3v = board[i][j + 2]
+
+			if tile1 == tile2 then
+				if tile2 == tile3 then
+					tile1[3] = true
+					tile2[3] = true
+					tile3[3] = true
+				end
+			elseif tile1 == tile2v then
+				if tile2v == tile3v then
+					tile1[3] = true
+					tile2v[3] = true
+					tile3v[3] = true
+				end
+			end	
 		end
 	end
 end
